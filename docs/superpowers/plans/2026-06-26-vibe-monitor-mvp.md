@@ -1311,7 +1311,7 @@ git push
 - Consumes all Tasks 1-9.
 - Produces a coherent MVP checkpoint ready for the next implementation phase.
 
-- [ ] **Step 1: Add README**
+- [x] **Step 1: Add README**
 
 Create `README.md` with:
 
@@ -1322,7 +1322,7 @@ Create `README.md` with:
 - privacy boundary
 - link to design doc and ADRs
 
-- [ ] **Step 2: Add MVP verification doc**
+- [x] **Step 2: Add MVP verification doc**
 
 Create `docs/mvp-verification.md` with manual scenarios:
 
@@ -1358,7 +1358,7 @@ Create `docs/mvp-verification.md` with manual scenarios:
 - Interrupt a running turn.
 ```
 
-- [ ] **Step 3: Run full automated checks**
+- [x] **Step 3: Run full automated checks**
 
 Run:
 
@@ -1372,7 +1372,7 @@ cd ..
 
 Expected: all pass.
 
-- [ ] **Step 4: Run desktop smoke test**
+- [x] **Step 4: Run desktop smoke test**
 
 Run:
 
@@ -1390,7 +1390,7 @@ Manual expected:
 - git panel loads for Git workspaces
 - Codex unavailable state or Codex connected state is clear
 
-- [ ] **Step 5: Check process cleanup**
+- [x] **Step 5: Check process cleanup**
 
 After closing the app, run:
 
@@ -1400,7 +1400,9 @@ Get-Process | Where-Object { $_.ProcessName -match 'codex|powershell|pwsh' } | S
 
 Expected: no vibe-monitor-owned Codex app-server or terminal child process remains. Existing unrelated user shells are acceptable.
 
-- [ ] **Step 6: Commit**
+Implementation note 2026-06-26: automated verification passed with `npm test -- --run`, `npm run build`, `cargo test`, and `cargo check`. Desktop smoke launched Vite on `http://localhost:1420`, compiled the Tauri app, and started `target\debug\vibe-monitor.exe`; the agent then stopped the smoke processes. Post-smoke cleanup showed no `vibe-monitor.exe`, `tauri dev`, or vibe-monitor-owned `codex app-server` process remained. The process list still contained the host Codex app and an unrelated PowerShell session. Full manual click-through of Workspace, Attention, Terminal, Git, and live Codex scenarios remains the release checklist in `docs/mvp-verification.md`.
+
+- [x] **Step 6: Commit**
 
 Run:
 
