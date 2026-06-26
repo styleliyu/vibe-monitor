@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useI18n } from "@/shared/i18n";
 import { cn } from "@/shared/lib/cn";
 import {
   getGitDiff,
@@ -24,6 +25,7 @@ type GitPanelProps = {
 };
 
 export function GitPanel({ workspaceId }: GitPanelProps) {
+  const { t } = useI18n();
   const queryClient = useQueryClient();
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
 
@@ -90,7 +92,7 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
           </span>
         ) : null}
         <Button
-          aria-label="Refresh Git status"
+          aria-label={t("git.refresh")}
           className="ml-auto"
           disabled={!workspaceId || statusQuery.isFetching}
           onClick={() => statusQuery.refetch()}
@@ -107,17 +109,17 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
       </div>
 
       {!workspaceId ? (
-        <StateMessage text="Select a workspace to inspect Git changes." />
+        <StateMessage text={t("git.selectWorkspace")} />
       ) : null}
 
       {workspaceId && statusQuery.isLoading ? (
-        <StateMessage icon="loading" text="Loading Git status..." />
+        <StateMessage icon="loading" text={t("git.loading")} />
       ) : null}
 
       {workspaceId && statusQuery.error ? (
         <StateMessage
           icon="warning"
-          text="Git status failed"
+          text={t("git.failed")}
           detail={String(statusQuery.error)}
         />
       ) : null}
@@ -125,8 +127,8 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
       {workspaceId && statusQuery.data && !statusQuery.data.available ? (
         <StateMessage
           icon="warning"
-          text="Git unavailable"
-          detail={statusQuery.data.error ?? "Git status could not be loaded."}
+          text={t("git.unavailable")}
+          detail={statusQuery.data.error ?? t("git.loadFailed")}
         />
       ) : null}
 
@@ -135,7 +137,7 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
           <ScrollArea className="border-b">
             <div className="space-y-1 p-2">
               {files.length === 0 ? (
-                <p className="px-2 py-4 text-sm text-muted-foreground">No Git changes.</p>
+                <p className="px-2 py-4 text-sm text-muted-foreground">{t("git.empty")}</p>
               ) : null}
               {files.map((file) => (
                 <GitFileButton
@@ -152,7 +154,7 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
             <div className="flex h-10 shrink-0 items-center gap-2 border-b px-3">
               <GitCompare className="size-4 text-muted-foreground" />
               <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
-                {selectedPath ?? "No file selected"}
+                {selectedPath ?? t("git.noFile")}
               </span>
               <Button
                 disabled={!selectedPath || stage.isPending}
@@ -161,7 +163,7 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
                 type="button"
                 variant="outline"
               >
-                Stage
+                {t("git.stage")}
               </Button>
               <Button
                 disabled={!selectedPath || unstage.isPending}
@@ -170,7 +172,7 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
                 type="button"
                 variant="outline"
               >
-                Unstage
+                {t("git.unstage")}
               </Button>
             </div>
 
@@ -183,7 +185,7 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
 
             <ScrollArea className="min-h-0 flex-1">
               {diffQuery.isFetching ? (
-                <p className="p-3 text-sm text-muted-foreground">Loading diff...</p>
+                <p className="p-3 text-sm text-muted-foreground">{t("git.loadingDiff")}</p>
               ) : null}
               {diffQuery.error ? (
                 <p className="p-3 text-sm text-destructive">{String(diffQuery.error)}</p>
@@ -191,7 +193,7 @@ export function GitPanel({ workspaceId }: GitPanelProps) {
               {!diffQuery.isFetching && !diffQuery.error ? (
                 <pre className="whitespace-pre-wrap break-words p-3 font-mono text-[11px] leading-5 text-muted-foreground">
                   {diffQuery.data?.text ||
-                    (selectedFile ? "No unstaged diff for this file." : "Select a file to view diff.")}
+                    (selectedFile ? t("git.noUnstagedDiff") : t("git.selectFile"))}
                 </pre>
               ) : null}
             </ScrollArea>

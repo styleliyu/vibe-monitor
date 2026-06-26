@@ -52,6 +52,20 @@ npm install
 npm run tauri dev
 ```
 
+生成可直接双击测试的 release exe：
+
+```powershell
+npm run tauri:build:exe
+```
+
+生成后打开：
+
+```text
+src-tauri\target\release\vibe-monitor.exe
+```
+
+注意：不要用 `cargo build --release` 生成测试 exe。它不会走 Tauri 前端资源嵌入流程，直接双击可能会访问 `localhost:1420` 并显示连接失败。
+
 运行前端测试：
 
 ```powershell

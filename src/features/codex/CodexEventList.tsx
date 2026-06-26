@@ -1,6 +1,7 @@
 import { Bot, Code2, TerminalSquare, UserRound } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useI18n } from "@/shared/i18n";
 import type { CodexEvent } from "./types";
 
 type CodexEventListProps = {
@@ -17,10 +18,12 @@ const iconByKind = {
 } satisfies Record<CodexEvent["kind"], typeof Bot>;
 
 export function CodexEventList({ events }: CodexEventListProps) {
+  const { t } = useI18n();
+
   if (events.length === 0) {
     return (
       <div className="flex min-h-0 flex-1 items-center justify-center px-4 text-sm text-muted-foreground">
-        No Codex events yet.
+        {t("codex.noEvents")}
       </div>
     );
   }
@@ -46,7 +49,7 @@ export function CodexEventList({ events }: CodexEventListProps) {
               ) : null}
               {import.meta.env.DEV && event.kind === "unknown" && event.raw ? (
                 <details className="mt-2 text-xs text-muted-foreground">
-                  <summary>Raw JSON</summary>
+                  <summary>{t("codex.rawJson")}</summary>
                   <pre className="mt-2 overflow-auto rounded bg-muted p-2">
                     {JSON.stringify(event.raw, null, 2)}
                   </pre>
