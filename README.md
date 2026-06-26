@@ -6,7 +6,7 @@ vibe-monitor is a local-first AI development Cockpit for keeping Workspace, Code
 
 ## Status
 
-This repository is a public early-stage MVP checkpoint. The current MVP scope is intentionally narrow:
+This project is under active development. This repository is a public early-stage MVP checkpoint, and the current scope is intentionally narrow:
 
 - Workspace management with local persistence
 - Codex app-server detection and Thread control surface
@@ -71,21 +71,6 @@ Start the desktop app:
 
 ```powershell
 npm run tauri dev
-```
-
-## Verification
-
-Use [docs/mvp-verification.md](docs/mvp-verification.md) for the full MVP smoke checklist.
-
-The minimum automated checkpoint before merging MVP work is:
-
-```powershell
-npm test -- --run
-npm run build
-cd src-tauri
-cargo test
-cargo check
-cd ..
 ```
 
 ## Privacy Boundary
