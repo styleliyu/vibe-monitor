@@ -862,7 +862,7 @@ git push
   - `codex://approval-requested`
   - `codex://turn-finished`
 
-- [ ] **Step 1: Implement Codex detection**
+- [x] **Step 1: Implement Codex detection**
 
 `codex_detect` runs:
 
@@ -880,7 +880,7 @@ type CodexAvailability = {
 };
 ```
 
-- [ ] **Step 2: Create JSON-RPC helper**
+- [x] **Step 2: Create JSON-RPC helper**
 
 Implement `jsonrpc.rs` with:
 
@@ -894,7 +894,7 @@ pub struct JsonRpcRequest<T> {
 
 Do not include a `"jsonrpc": "2.0"` field on the wire for Codex app-server messages unless current Codex testing proves it is required.
 
-- [ ] **Step 3: Start app-server process**
+- [x] **Step 3: Start app-server process**
 
 `process.rs` starts:
 
@@ -904,7 +904,7 @@ codex app-server
 
 Use piped stdin/stdout. Keep one app-server process per application instance for MVP. Store process handle in shared Rust state behind `tokio::sync::Mutex`.
 
-- [ ] **Step 4: Implement thread list/start/send**
+- [x] **Step 4: Implement thread list/start/send**
 
 Map commands:
 
@@ -915,11 +915,11 @@ Map commands:
 
 If exact Codex params differ in current CLI, update adapter tests and keep frontend API stable.
 
-- [ ] **Step 5: Emit events**
+- [x] **Step 5: Emit events**
 
 Read app-server stdout continuously and emit known notifications to frontend. Unknown notifications should be logged and ignored, not crash the adapter.
 
-- [ ] **Step 6: Create frontend API and types**
+- [x] **Step 6: Create frontend API and types**
 
 Create `src/features/codex/types.ts`:
 
@@ -937,11 +937,11 @@ export type CodexThreadSummary = {
 
 Create API wrappers in `src/features/codex/api.ts`.
 
-- [ ] **Step 7: Connect approval events to Attention**
+- [x] **Step 7: Connect approval events to Attention**
 
 When Rust sees a Codex approval request, create an `approval` Attention Item with priority `3`, title `Codex approval required`, and action ref containing thread id plus approval id.
 
-- [ ] **Step 8: Verify**
+- [x] **Step 8: Verify**
 
 Run:
 
@@ -959,7 +959,9 @@ Manual check:
 - If Codex CLI is missing, UI shows unavailable state.
 - If Codex CLI exists, starting app-server does not freeze UI.
 
-- [ ] **Step 9: Commit**
+Implementation note 2026-06-26: on this Windows host, `codex --version` resolves to the WindowsApps Codex binary but exits with `Access is denied`; the MVP adapter therefore treats Codex as unavailable and keeps the app responsive. JSON-RPC method names and frontend APIs are isolated so exact app-server params can be updated inside `src-tauri/src/codex` when a runnable Codex CLI is available.
+
+- [x] **Step 9: Commit**
 
 Run:
 
@@ -984,7 +986,7 @@ git push
 - Consumes Attention Queue from Task 5.
 - Produces user-facing Codex control surface.
 
-- [ ] **Step 1: Add Codex panel states**
+- [x] **Step 1: Add Codex panel states**
 
 CodexPanel must render:
 
@@ -995,11 +997,11 @@ CodexPanel must render:
 - blocked on approval
 - error state
 
-- [ ] **Step 2: Add composer**
+- [x] **Step 2: Add composer**
 
 `CodexComposer` has textarea and send button. Send calls `codex_thread_start` if no thread exists, otherwise `codex_turn_send`.
 
-- [ ] **Step 3: Add event list**
+- [x] **Step 3: Add event list**
 
 `CodexEventList` renders:
 
@@ -1011,7 +1013,7 @@ CodexPanel must render:
 
 Default: tool/log details collapsed.
 
-- [ ] **Step 4: Add approval card**
+- [x] **Step 4: Add approval card**
 
 `ApprovalCard` displays:
 
@@ -1023,11 +1025,11 @@ Default: tool/log details collapsed.
 
 MVP can implement Approve/Reject as adapter calls once exact approval response method is confirmed. If the current Codex app-server approval method differs, isolate that change inside `src-tauri/src/codex`.
 
-- [ ] **Step 5: Wire Attention Queue actions**
+- [x] **Step 5: Wire Attention Queue actions**
 
 When an `approval` item has `actionRef`, clicking the card selects the related Codex thread and scrolls to the approval context.
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Run:
 
@@ -1042,7 +1044,9 @@ Manual check:
 - UI remains responsive.
 - Approval items appear in right queue when Codex requests user action.
 
-- [ ] **Step 7: Commit**
+Implementation note 2026-06-26: live prompt/approval smoke testing is blocked by the local Codex binary access denial above; automated tests cover unavailable UI state, thread start API wiring, approval card actions, event rendering, and approval-to-Attention mapping.
+
+- [x] **Step 7: Commit**
 
 Run:
 

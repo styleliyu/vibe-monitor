@@ -1,4 +1,4 @@
-use std::{process::Command, path::Path};
+use std::{path::Path, process::Command};
 
 use tempfile::tempdir;
 use vibe_monitor_lib::{db, workspace};
@@ -10,7 +10,11 @@ fn workspace_add_rejects_non_directory_paths() {
 
     let result = workspace::add_workspace(
         app_data.path(),
-        app_data.path().join("missing").to_string_lossy().to_string(),
+        app_data
+            .path()
+            .join("missing")
+            .to_string_lossy()
+            .to_string(),
         None,
     );
 
@@ -61,8 +65,9 @@ fn workspace_add_records_git_root_when_directory_is_inside_a_git_repo() {
     let nested = repo_dir.path().join("nested");
     std::fs::create_dir(&nested).expect("nested workspace directory");
 
-    let added = workspace::add_workspace(app_data.path(), nested.to_string_lossy().to_string(), None)
-        .expect("workspace should be added");
+    let added =
+        workspace::add_workspace(app_data.path(), nested.to_string_lossy().to_string(), None)
+            .expect("workspace should be added");
 
     assert_eq!(
         added.git_root.as_deref(),

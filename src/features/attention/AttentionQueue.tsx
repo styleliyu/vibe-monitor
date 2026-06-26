@@ -7,6 +7,7 @@ import type { AttentionItem, AttentionKind } from "./types";
 import { useAttentionQueue } from "./useAttentionQueue";
 
 type AttentionQueueProps = {
+  onAction?: (item: AttentionItem) => void;
   workspaceId?: string | null;
 };
 
@@ -19,7 +20,7 @@ const kindTone: Record<AttentionKind, string> = {
   info: "border-zinc-500/30 bg-zinc-500/10 text-zinc-700",
 };
 
-export function AttentionQueue({ workspaceId }: AttentionQueueProps) {
+export function AttentionQueue({ onAction, workspaceId }: AttentionQueueProps) {
   const {
     data: items = [],
     isLoading,
@@ -97,6 +98,7 @@ export function AttentionQueue({ workspaceId }: AttentionQueueProps) {
               isResolving={isResolvingAttentionItem}
               item={item}
               key={item.id}
+              onAction={onAction ? () => onAction(item) : undefined}
               onResolve={() => resolveAttentionItem(item.id)}
             />
           ))}
@@ -109,10 +111,12 @@ export function AttentionQueue({ workspaceId }: AttentionQueueProps) {
 function AttentionCard({
   isResolving,
   item,
+  onAction,
   onResolve,
 }: {
   isResolving: boolean;
   item: AttentionItem;
+  onAction?: () => void;
   onResolve: () => void;
 }) {
   return (
@@ -137,7 +141,16 @@ function AttentionCard({
           {item.kind}
         </Badge>
         {item.actionLabel ? (
-          <span className="truncate text-xs text-muted-foreground">{item.actionLabel}</span>
+          <Button
+            className="h-auto min-w-0 truncate px-1 text-xs text-muted-foreground"
+            disabled={!onAction}
+            onClick={onAction}
+            size="sm"
+            type="button"
+            variant="link"
+          >
+            {item.actionLabel}
+          </Button>
         ) : null}
         <Button
           aria-label={`Resolve ${item.title}`}

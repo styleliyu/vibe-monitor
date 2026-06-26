@@ -148,6 +148,23 @@ fn find_workspace_by_path(app_data_dir: &Path, path: &str) -> Result<Option<Work
     Ok(workspace)
 }
 
+pub fn find_workspace_by_id(app_data_dir: &Path, id: &str) -> Result<Option<Workspace>, AppError> {
+    let connection = db::connection(app_data_dir)?;
+    let workspace = connection
+        .query_row(
+            r#"
+            SELECT id, name, path, git_root, default_ai_engine, created_at, updated_at
+            FROM workspaces
+            WHERE id = ?1
+            "#,
+            params![id],
+            workspace_from_row,
+        )
+        .optional()?;
+
+    Ok(workspace)
+}
+
 fn validate_workspace_path(path: &str) -> Result<PathBuf, AppError> {
     let trimmed = path.trim();
     if trimmed.is_empty() {
@@ -175,7 +192,12 @@ fn directory_name(path: &Path) -> Result<String, AppError> {
 
 fn detect_git_root(path: &Path) -> Option<String> {
     let output = Command::new("git")
-        .args(["-C", &path.to_string_lossy(), "rev-parse", "--show-toplevel"])
+        .args([
+            "-C",
+            &path.to_string_lossy(),
+            "rev-parse",
+            "--show-toplevel",
+        ])
         .output()
         .ok()?;
 
@@ -199,8 +221,7 @@ fn detect_git_root(path: &Path) -> Option<String> {
 fn path_to_display_string(path: &Path) -> String {
     const EXTENDED_PATH_PREFIX: &str = r"\\?\";
     let path = path.to_string_lossy().to_string();
-    path
-        .strip_prefix(EXTENDED_PATH_PREFIX)
+    path.strip_prefix(EXTENDED_PATH_PREFIX)
         .unwrap_or(&path)
         .to_string()
 }

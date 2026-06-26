@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { GitBranch, Monitor, Terminal } from "lucide-react";
 import { AttentionQueue } from "@/features/attention/AttentionQueue";
+import { CodexPanel } from "@/features/codex/CodexPanel";
 import { WorkspaceSidebar } from "@/features/workspace/WorkspaceSidebar";
 
 export function AppShell() {
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string | null>(null);
+  const [selectedCodexThreadId, setSelectedCodexThreadId] = useState<string | null>(null);
 
   return (
     <div className="grid h-screen min-h-0 grid-cols-[280px_minmax(0,1fr)_360px] grid-rows-[48px_minmax(0,1fr)_240px] bg-background text-foreground">
@@ -19,13 +21,19 @@ export function AppShell() {
       </aside>
 
       <main className="min-w-0">
-        <div className="flex h-12 items-center gap-2 border-b px-4 text-sm font-medium">
-          Codex Session
-        </div>
+        <CodexPanel selectedThreadId={selectedCodexThreadId} workspaceId={selectedWorkspaceId} />
       </main>
 
       <aside className="row-span-2 min-h-0 border-l">
-        <AttentionQueue workspaceId={selectedWorkspaceId} />
+        <AttentionQueue
+          onAction={(item) => {
+            const threadId = item.actionRef?.match(/^codex:\/\/thread\/([^/]+)/)?.[1];
+            if (threadId) {
+              setSelectedCodexThreadId(threadId);
+            }
+          }}
+          workspaceId={selectedWorkspaceId}
+        />
       </aside>
 
       <section className="border-t">

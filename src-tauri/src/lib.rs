@@ -1,10 +1,14 @@
 pub mod attention;
+pub mod codex;
 pub mod db;
 pub mod error;
 pub mod state;
 pub mod workspace;
 
+use std::sync::Arc;
+
 use tauri::Manager;
+use tokio::sync::Mutex;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -17,13 +21,21 @@ pub fn run() {
         .setup(|app| {
             let app_data_dir = app.path().app_data_dir()?;
             db::init_db(&app_data_dir)?;
-            app.manage(state::AppState { app_data_dir });
+            app.manage(state::AppState {
+                app_data_dir,
+                codex: Arc::new(Mutex::new(codex::process::CodexProcessManager::default())),
+            });
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
             attention::attention_list,
             attention::attention_create,
             attention::attention_resolve,
+            codex::codex_detect,
+            codex::codex_thread_list,
+            codex::codex_thread_start,
+            codex::codex_turn_send,
+            codex::codex_turn_interrupt,
             workspace::workspace_list,
             workspace::workspace_add,
             workspace::workspace_remove
