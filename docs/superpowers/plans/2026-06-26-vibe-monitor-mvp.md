@@ -241,7 +241,7 @@ Expected: commit is pushed to `origin/main`.
 - Produces: `SessionSummary`, `AppShell`, and stable UI regions for later features.
 - Consumes: scaffold from Task 1.
 
-- [ ] **Step 1: Define session types**
+- [x] **Step 1: Define session types**
 
 Create `src/shared/types/session.ts`:
 
@@ -268,7 +268,7 @@ export type SessionSummary = {
 };
 ```
 
-- [ ] **Step 2: Add utility helper**
+- [x] **Step 2: Add utility helper**
 
 Create `src/shared/lib/cn.ts`:
 
@@ -281,7 +281,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-- [ ] **Step 3: Create providers**
+- [x] **Step 3: Create providers**
 
 Create `src/app/providers/AppProviders.tsx`:
 
@@ -298,7 +298,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
 }
 ```
 
-- [ ] **Step 4: Build fixed MVP layout**
+- [x] **Step 4: Build fixed MVP layout**
 
 Create `src/app/layout/AppShell.tsx`:
 
@@ -349,7 +349,7 @@ export function AppShell() {
 }
 ```
 
-- [ ] **Step 5: Wire app entry**
+- [x] **Step 5: Wire app entry**
 
 Create `src/app/App.tsx`:
 
@@ -368,7 +368,7 @@ export function App() {
 
 Update `src/main.tsx` to render `App`.
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Run:
 
@@ -378,7 +378,7 @@ npm run build
 
 Expected: TypeScript and Vite build pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 Run:
 
@@ -405,7 +405,7 @@ git push
   - `workspace_remove(id: String) -> Result<(), AppError>`
 - Produces Rust type `Workspace`.
 
-- [ ] **Step 1: Define Rust error type**
+- [x] **Step 1: Define Rust error type**
 
 Create `src-tauri/src/error.rs`:
 
@@ -434,7 +434,7 @@ impl Serialize for AppError {
 }
 ```
 
-- [ ] **Step 2: Define application state**
+- [x] **Step 2: Define application state**
 
 Create `src-tauri/src/state.rs`:
 
@@ -447,7 +447,7 @@ pub struct AppState {
 }
 ```
 
-- [ ] **Step 3: Initialize database file and schema**
+- [x] **Step 3: Initialize database file and schema**
 
 Create `src-tauri/src/db/mod.rs` with an `init_db(app_data_dir: &Path) -> Result<(), AppError>` function that creates `vibe-monitor.db` and a `workspaces` table:
 
@@ -465,7 +465,7 @@ CREATE TABLE IF NOT EXISTS workspaces (
 
 Use `rusqlite` if selected during implementation, or `tauri-plugin-sql` if using plugin-managed SQL. Keep the database path under Tauri app data.
 
-- [ ] **Step 4: Add `rusqlite` if using backend-owned SQLite**
+- [x] **Step 4: Add `rusqlite` if using backend-owned SQLite**
 
 If backend-owned SQLite is chosen for MVP commands, run:
 
@@ -477,7 +477,7 @@ cd ..
 
 Expected: Rust commands can read/write SQLite without frontend SQL access.
 
-- [ ] **Step 5: Implement Workspace type and commands**
+- [x] **Step 5: Implement Workspace type and commands**
 
 Create `src-tauri/src/workspace/mod.rs`:
 
@@ -519,7 +519,7 @@ pub async fn workspace_remove(
 
 `workspace_add` must reject non-directory paths and derive `name` from the directory name when `name` is absent.
 
-- [ ] **Step 6: Detect Git root**
+- [x] **Step 6: Detect Git root**
 
 In `workspace_add`, run:
 
@@ -532,11 +532,11 @@ Behavior:
 - Exit code 0: store stdout as `gitRoot`.
 - Non-zero: store `gitRoot = null`; workspace is still valid.
 
-- [ ] **Step 7: Register commands**
+- [x] **Step 7: Register commands**
 
 Update `src-tauri/src/lib.rs` to manage `AppState`, call database initialization during setup, and register Workspace commands with `tauri::generate_handler!`.
 
-- [ ] **Step 8: Verify**
+- [x] **Step 8: Verify**
 
 Run:
 
@@ -550,7 +550,7 @@ npm run build
 
 Expected: all pass.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 Run:
 
@@ -575,7 +575,7 @@ git push
 - Consumes Rust commands from Task 3.
 - Produces `useWorkspaces()` and `WorkspaceSidebar`.
 
-- [ ] **Step 1: Add typed Tauri invoke wrapper**
+- [x] **Step 1: Add typed Tauri invoke wrapper**
 
 Create `src/shared/api/tauri.ts`:
 
@@ -587,7 +587,7 @@ export function callTauri<T>(command: string, args?: Record<string, unknown>) {
 }
 ```
 
-- [ ] **Step 2: Add Workspace frontend type**
+- [x] **Step 2: Add Workspace frontend type**
 
 Create `src/features/workspace/types.ts` matching Rust camelCase output:
 
@@ -603,7 +603,7 @@ export type Workspace = {
 };
 ```
 
-- [ ] **Step 3: Add Workspace API**
+- [x] **Step 3: Add Workspace API**
 
 Create `src/features/workspace/api.ts`:
 
@@ -624,7 +624,7 @@ export function removeWorkspace(id: string) {
 }
 ```
 
-- [ ] **Step 4: Add hook**
+- [x] **Step 4: Add hook**
 
 Create `src/features/workspace/useWorkspaces.ts` with TanStack Query:
 
@@ -649,7 +649,7 @@ export function useWorkspaces() {
 }
 ```
 
-- [ ] **Step 5: Build sidebar**
+- [x] **Step 5: Build sidebar**
 
 Create `WorkspaceSidebar` with:
 
@@ -659,11 +659,11 @@ Create `WorkspaceSidebar` with:
 - add button
 - selected workspace local state
 
-- [ ] **Step 6: Wire into shell**
+- [x] **Step 6: Wire into shell**
 
 Update `AppShell` left sidebar to render `WorkspaceSidebar`.
 
-- [ ] **Step 7: Verify**
+- [x] **Step 7: Verify**
 
 Run:
 
@@ -678,7 +678,7 @@ Manual check:
 - Restart the app.
 - Workspace still appears.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 Run:
 
@@ -1419,4 +1419,3 @@ The MVP is complete when:
 - The Attention Queue persists unresolved items and hides resolved items.
 - `npm run build`, `cargo test`, and `cargo check` pass.
 - Closing the app cleans up owned child processes.
-
