@@ -2,6 +2,7 @@ pub mod attention;
 pub mod codex;
 pub mod db;
 pub mod error;
+pub mod git;
 pub mod state;
 pub mod terminal;
 pub mod workspace;
@@ -40,6 +41,10 @@ pub fn run() {
             codex::codex_thread_start,
             codex::codex_turn_send,
             codex::codex_turn_interrupt,
+            git::git_status,
+            git::git_diff,
+            git::git_stage,
+            git::git_unstage,
             terminal::terminal_open,
             terminal::terminal_write,
             terminal::terminal_resize,

@@ -1184,7 +1184,7 @@ git push
   - `git_stage(workspace_id: String, path: String) -> ()`
   - `git_unstage(workspace_id: String, path: String) -> ()`
 
-- [ ] **Step 1: Define types**
+- [x] **Step 1: Define types**
 
 Create TypeScript shape:
 
@@ -1212,7 +1212,7 @@ export type GitDiff = {
 
 Mirror in Rust with `serde`.
 
-- [ ] **Step 2: Implement status command**
+- [x] **Step 2: Implement status command**
 
 Run:
 
@@ -1226,7 +1226,7 @@ Behavior:
 - git command failure: return `available=false` with error
 - success: parse branch and file lines
 
-- [ ] **Step 3: Implement diff command**
+- [x] **Step 3: Implement diff command**
 
 Run:
 
@@ -1240,7 +1240,7 @@ If `path` is absent, run:
 git -C <gitRoot> diff
 ```
 
-- [ ] **Step 4: Implement stage/unstage**
+- [x] **Step 4: Implement stage/unstage**
 
 Run:
 
@@ -1251,7 +1251,7 @@ git -C <gitRoot> restore --staged -- <path>
 
 Never run destructive commands such as reset or checkout in MVP Git UI.
 
-- [ ] **Step 5: Build Git panel**
+- [x] **Step 5: Build Git panel**
 
 `GitPanel` shows:
 
@@ -1262,11 +1262,11 @@ Never run destructive commands such as reset or checkout in MVP Git UI.
 - stage/unstage buttons
 - empty state
 
-- [ ] **Step 6: Connect Git conflicts to Attention**
+- [x] **Step 6: Connect Git conflicts to Attention**
 
 If status output includes unmerged states, create a `blocked` Attention Item with priority `3` and title `Git conflict requires attention`.
 
-- [ ] **Step 7: Verify**
+- [x] **Step 7: Verify**
 
 Run:
 
@@ -1285,7 +1285,9 @@ Manual check:
 - Diff renders.
 - Stage and unstage work.
 
-- [ ] **Step 8: Commit**
+Implementation note 2026-06-26: Git MVP uses `git status --porcelain=v1 --branch`, `git diff`, `git add`, and `git restore --staged` through Rust commands with separate process arguments. The frontend `GitPanel` shows branch, ahead/behind counts, changed files, selected-file diff, and stage/unstage actions. Unmerged porcelain states create a high-priority blocked Attention Item titled `Git conflict requires attention`. Automated verification passed with `npm test -- --run`, `npm run build`, `cargo test`, and `cargo check`; the desktop smoke checklist above still needs a manual click-through before public release.
+
+- [x] **Step 8: Commit**
 
 Run:
 
