@@ -2,6 +2,7 @@ import { AlertCircle, Bell, Check, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useI18n } from "@/shared/i18n";
 import { cn } from "@/shared/lib/cn";
 import type { AttentionItem, AttentionKind } from "./types";
 import { useAttentionQueue } from "./useAttentionQueue";
@@ -21,6 +22,7 @@ const kindTone: Record<AttentionKind, string> = {
 };
 
 export function AttentionQueue({ onAction, workspaceId }: AttentionQueueProps) {
+  const { t } = useI18n();
   const {
     data: items = [],
     isLoading,
@@ -42,9 +44,9 @@ export function AttentionQueue({ onAction, workspaceId }: AttentionQueueProps) {
       workspaceId,
       kind: "failed",
       priority: 3,
-      title: "Sample build failure",
-      summary: "Development seed item for verifying the active attention queue.",
-      actionLabel: "Inspect",
+      title: t("attention.sampleTitle"),
+      summary: t("attention.sampleSummary"),
+      actionLabel: t("attention.sampleAction"),
       actionRef: "dev-seed",
     });
   }
@@ -53,9 +55,9 @@ export function AttentionQueue({ onAction, workspaceId }: AttentionQueueProps) {
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex h-12 shrink-0 items-center gap-2 border-b px-3 text-sm font-medium">
         <Bell className="size-4" />
-        <span>Attention Queue</span>
+        <span>{t("attention.title")}</span>
         <Badge className="ml-auto" variant="secondary">
-          {items.length} active
+          {t("attention.activeCount", { count: items.length })}
         </Badge>
       </div>
 
@@ -70,7 +72,7 @@ export function AttentionQueue({ onAction, workspaceId }: AttentionQueueProps) {
             variant="outline"
           >
             <Plus className="size-4" />
-            Seed failed item
+            {t("attention.seed")}
           </Button>
         </div>
       ) : null}
@@ -78,7 +80,7 @@ export function AttentionQueue({ onAction, workspaceId }: AttentionQueueProps) {
       <ScrollArea className="min-h-0 flex-1">
         <div className="space-y-2 p-3">
           {isLoading ? (
-            <p className="text-sm text-muted-foreground">Loading attention items...</p>
+            <p className="text-sm text-muted-foreground">{t("attention.loading")}</p>
           ) : null}
 
           {error ? <p className="text-sm text-destructive">{String(error)}</p> : null}
@@ -90,7 +92,7 @@ export function AttentionQueue({ onAction, workspaceId }: AttentionQueueProps) {
           ) : null}
 
           {!isLoading && !error && items.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No attention items.</p>
+            <p className="text-sm text-muted-foreground">{t("attention.empty")}</p>
           ) : null}
 
           {items.map((item) => (
@@ -100,6 +102,8 @@ export function AttentionQueue({ onAction, workspaceId }: AttentionQueueProps) {
               key={item.id}
               onAction={onAction ? () => onAction(item) : undefined}
               onResolve={() => resolveAttentionItem(item.id)}
+              resolveAriaLabel={t("attention.resolveAria", { title: item.title })}
+              resolveLabel={t("attention.resolve")}
             />
           ))}
         </div>
@@ -113,11 +117,15 @@ function AttentionCard({
   item,
   onAction,
   onResolve,
+  resolveAriaLabel,
+  resolveLabel,
 }: {
   isResolving: boolean;
   item: AttentionItem;
   onAction?: () => void;
   onResolve: () => void;
+  resolveAriaLabel: string;
+  resolveLabel: string;
 }) {
   return (
     <article className="rounded-md border bg-card p-3 text-card-foreground shadow-xs">
@@ -153,7 +161,7 @@ function AttentionCard({
           </Button>
         ) : null}
         <Button
-          aria-label={`Resolve ${item.title}`}
+          aria-label={resolveAriaLabel}
           className="ml-auto"
           disabled={isResolving}
           onClick={onResolve}
@@ -162,7 +170,7 @@ function AttentionCard({
           variant="ghost"
         >
           <Check className="size-4" />
-          Resolve
+          {resolveLabel}
         </Button>
       </div>
     </article>

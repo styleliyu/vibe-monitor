@@ -3,10 +3,13 @@ import { Monitor } from "lucide-react";
 import { AttentionQueue } from "@/features/attention/AttentionQueue";
 import { CodexPanel } from "@/features/codex/CodexPanel";
 import { GitPanel } from "@/features/git/GitPanel";
+import { SettingsPanel } from "@/features/settings/SettingsPanel";
 import { TerminalPanel } from "@/features/terminal/TerminalPanel";
 import { WorkspaceSidebar } from "@/features/workspace/WorkspaceSidebar";
+import { useI18n } from "@/shared/i18n";
 
 export function AppShell() {
+  const { t } = useI18n();
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string | null>(null);
   const [selectedCodexThreadId, setSelectedCodexThreadId] = useState<string | null>(null);
 
@@ -15,7 +18,8 @@ export function AppShell() {
       <header className="col-span-3 flex items-center gap-3 border-b px-4">
         <Monitor className="size-5" />
         <span className="font-semibold">vibe-monitor</span>
-        <div className="ml-auto text-sm text-muted-foreground">MVP Cockpit</div>
+        <div className="ml-auto text-sm text-muted-foreground">{t("app.cockpit")}</div>
+        <SettingsPanel />
       </header>
 
       <aside className="row-span-2 min-h-0 border-r">

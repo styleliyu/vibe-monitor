@@ -3,6 +3,7 @@ import { type FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useI18n } from "@/shared/i18n";
 import { cn } from "@/shared/lib/cn";
 import { useWorkspaces } from "./useWorkspaces";
 
@@ -11,6 +12,7 @@ type WorkspaceSidebarProps = {
 };
 
 export function WorkspaceSidebar({ onWorkspaceSelect }: WorkspaceSidebarProps) {
+  const { t } = useI18n();
   const [path, setPath] = useState("");
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string | null>(null);
   const {
@@ -44,12 +46,12 @@ export function WorkspaceSidebar({ onWorkspaceSelect }: WorkspaceSidebarProps) {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex h-12 shrink-0 items-center gap-2 border-b px-3 text-sm font-medium">
-        Workspaces
+        {t("workspace.title")}
       </div>
 
       <form className="space-y-2 border-b p-3" onSubmit={handleSubmit}>
         <label className="text-xs font-medium text-muted-foreground" htmlFor="workspace-path">
-          Workspace path
+          {t("workspace.path")}
         </label>
         <div className="flex gap-2">
           <Input
@@ -59,7 +61,7 @@ export function WorkspaceSidebar({ onWorkspaceSelect }: WorkspaceSidebarProps) {
             placeholder="D:\AIdeas\CodingMonitor"
           />
           <Button
-            aria-label="Add workspace"
+            aria-label={t("workspace.add")}
             disabled={isAddingWorkspace || path.trim().length === 0}
             size="icon"
             type="submit"
@@ -75,7 +77,7 @@ export function WorkspaceSidebar({ onWorkspaceSelect }: WorkspaceSidebarProps) {
       <ScrollArea className="min-h-0 flex-1">
         <div className="space-y-1 p-2">
           {isLoading ? (
-            <p className="px-2 py-3 text-sm text-muted-foreground">Loading workspaces...</p>
+            <p className="px-2 py-3 text-sm text-muted-foreground">{t("workspace.loading")}</p>
           ) : null}
 
           {error ? (
@@ -84,7 +86,7 @@ export function WorkspaceSidebar({ onWorkspaceSelect }: WorkspaceSidebarProps) {
 
           {!isLoading && !error && workspaces.length === 0 ? (
             <p className="px-2 py-3 text-sm text-muted-foreground">
-              Add a workspace to start monitoring AI development work.
+              {t("workspace.empty")}
             </p>
           ) : null}
 
@@ -108,7 +110,7 @@ export function WorkspaceSidebar({ onWorkspaceSelect }: WorkspaceSidebarProps) {
                 </span>
               </span>
               <Button
-                aria-label={`Remove ${workspace.name}`}
+                aria-label={t("workspace.remove", { name: workspace.name })}
                 className="opacity-0 group-hover:opacity-100"
                 onClick={(event) => {
                   event.stopPropagation();

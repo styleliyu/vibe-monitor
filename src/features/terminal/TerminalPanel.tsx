@@ -6,6 +6,7 @@ import { Loader2, Power, SquareTerminal, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/shared/i18n";
 import {
   closeTerminal,
   openTerminal,
@@ -19,6 +20,7 @@ type TerminalPanelProps = {
 };
 
 export function TerminalPanel({ workspaceId }: TerminalPanelProps) {
+  const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const xtermRef = useRef<XtermTerminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
@@ -153,7 +155,7 @@ export function TerminalPanel({ workspaceId }: TerminalPanelProps) {
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4 text-sm font-medium">
         <SquareTerminal className="size-4" />
-        <span>Terminal</span>
+        <span>{t("terminal.title")}</span>
         {session ? (
           <Badge className="max-w-[220px] truncate" variant="secondary">
             {session.shell}
@@ -161,7 +163,7 @@ export function TerminalPanel({ workspaceId }: TerminalPanelProps) {
         ) : null}
         <div className="ml-auto flex items-center gap-2">
           {session ? (
-            <Button aria-label="Close terminal" size="icon" variant="ghost" onClick={handleClose}>
+            <Button aria-label={t("terminal.close")} size="icon" variant="ghost" onClick={handleClose}>
               <X className="size-4" />
             </Button>
           ) : (
@@ -176,7 +178,7 @@ export function TerminalPanel({ workspaceId }: TerminalPanelProps) {
               ) : (
                 <Power className="size-4" />
               )}
-              Open terminal
+              {t("terminal.open")}
             </Button>
           )}
         </div>
@@ -184,7 +186,7 @@ export function TerminalPanel({ workspaceId }: TerminalPanelProps) {
 
       {!workspaceId ? (
         <div className="flex flex-1 items-center justify-center px-4 text-sm text-muted-foreground">
-          Select a workspace to open a terminal.
+          {t("terminal.selectWorkspace")}
         </div>
       ) : null}
 

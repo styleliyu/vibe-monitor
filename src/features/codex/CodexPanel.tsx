@@ -3,6 +3,7 @@ import { listen } from "@tauri-apps/api/event";
 import { AlertTriangle, Bot, CheckCircle2, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/shared/i18n";
 import {
   detectCodex,
   interruptCodexTurn,
@@ -19,6 +20,7 @@ type CodexPanelProps = {
 };
 
 export function CodexPanel({ selectedThreadId, workspaceId }: CodexPanelProps) {
+  const { t } = useI18n();
   const [thread, setThread] = useState<CodexThreadSummary | null>(null);
   const [events, setEvents] = useState<CodexEvent[]>([]);
   const [panelError, setPanelError] = useState<string | null>(null);
@@ -56,7 +58,7 @@ export function CodexPanel({ selectedThreadId, workspaceId }: CodexPanelProps) {
         {
           id: `user-${Date.now()}`,
           kind: "user",
-          title: "User instruction",
+          title: t("codex.userInstruction"),
           body: prompt,
         },
       ]);
@@ -79,10 +81,10 @@ export function CodexPanel({ selectedThreadId, workspaceId }: CodexPanelProps) {
 
     async function bindEvents() {
       const pairs: Array<[string, CodexEvent["kind"], string]> = [
-        ["codex://item", "assistant", "Codex item"],
-        ["codex://approval-requested", "approval", "Approval requested"],
-        ["codex://thread-updated", "assistant", "Thread updated"],
-        ["codex://turn-finished", "assistant", "Turn finished"],
+        ["codex://item", "assistant", t("codex.eventItem")],
+        ["codex://approval-requested", "approval", t("codex.approvalRequested")],
+        ["codex://thread-updated", "assistant", t("codex.threadUpdated")],
+        ["codex://turn-finished", "assistant", t("codex.turnFinished")],
       ];
 
       for (const [eventName, kind, title] of pairs) {
@@ -116,7 +118,7 @@ export function CodexPanel({ selectedThreadId, workspaceId }: CodexPanelProps) {
       cancelled = true;
       unlistenFns.forEach((unlisten) => unlisten());
     };
-  }, []);
+  }, [t]);
 
   const status = useMemo(() => {
     if (!workspaceId) {
@@ -148,25 +150,25 @@ export function CodexPanel({ selectedThreadId, workspaceId }: CodexPanelProps) {
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex h-12 shrink-0 items-center gap-2 border-b px-4 text-sm font-medium">
         <Bot className="size-4" />
-        <span>Codex Session</span>
+        <span>{t("codex.title")}</span>
         <Badge className="ml-auto" variant={status === "blocked" ? "destructive" : "secondary"}>
           {status}
         </Badge>
       </div>
 
       {!workspaceId ? (
-        <StateMessage text="Select a workspace to start a Codex session." />
+        <StateMessage text={t("codex.selectWorkspace")} />
       ) : null}
 
       {workspaceId && detection.isLoading ? (
-        <StateMessage icon="loading" text="Checking Codex CLI..." />
+        <StateMessage icon="loading" text={t("codex.checking")} />
       ) : null}
 
       {unavailable ? (
         <StateMessage
           icon="warning"
-          text="Codex CLI unavailable"
-          detail={detection.data?.error ?? "Codex could not be detected."}
+          text={t("codex.unavailable")}
+          detail={detection.data?.error ?? t("codex.detectFailed")}
         />
       ) : null}
 
@@ -174,8 +176,10 @@ export function CodexPanel({ selectedThreadId, workspaceId }: CodexPanelProps) {
         <>
           <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4 text-xs text-muted-foreground">
             <CheckCircle2 className="size-4 text-emerald-600" />
-            <span>{detection.data.version ?? "Codex available"}</span>
-            {selectedThreadId ? <span className="ml-auto">Selected {selectedThreadId}</span> : null}
+            <span>{detection.data.version ?? t("codex.available")}</span>
+            {selectedThreadId ? (
+              <span className="ml-auto">{t("codex.selected", { id: selectedThreadId })}</span>
+            ) : null}
           </div>
           {panelError ? (
             <p className="border-b px-4 py-2 text-sm text-destructive">{panelError}</p>

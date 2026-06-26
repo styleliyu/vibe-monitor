@@ -2,6 +2,7 @@ import { Send, Square } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useI18n } from "@/shared/i18n";
 
 type CodexComposerProps = {
   disabled?: boolean;
@@ -16,6 +17,7 @@ export function CodexComposer({
   onInterrupt,
   onSend,
 }: CodexComposerProps) {
+  const { t } = useI18n();
   const [prompt, setPrompt] = useState("");
 
   function handleSubmit() {
@@ -33,25 +35,25 @@ export function CodexComposer({
         className="min-h-20 resize-none"
         disabled={disabled}
         onChange={(event) => setPrompt(event.target.value)}
-        placeholder="Send a Codex instruction..."
+        placeholder={t("codex.placeholder")}
         value={prompt}
       />
       <div className="mt-2 flex justify-end gap-2">
         {isRunning ? (
           <Button onClick={onInterrupt} size="sm" type="button" variant="outline">
             <Square className="size-4" />
-            Interrupt
+            {t("codex.interrupt")}
           </Button>
         ) : null}
         <Button
-          aria-label="Send to Codex"
+          aria-label={t("codex.sendAria")}
           disabled={disabled || !prompt.trim()}
           onClick={handleSubmit}
           size="sm"
           type="button"
         >
           <Send className="size-4" />
-          Send
+          {t("codex.send")}
         </Button>
       </div>
     </div>
