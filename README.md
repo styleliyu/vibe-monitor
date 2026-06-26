@@ -1,5 +1,7 @@
 # vibe-monitor
 
+[中文说明](README.zh-CN.md)
+
 vibe-monitor is a local-first AI development Cockpit for keeping Workspace, Codex Thread, terminal, Git state, and Attention Queue work in one desktop control surface.
 
 ## Status
