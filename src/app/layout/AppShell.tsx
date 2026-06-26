@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { GitBranch, Monitor, Terminal } from "lucide-react";
+import { GitBranch, Monitor } from "lucide-react";
 import { AttentionQueue } from "@/features/attention/AttentionQueue";
 import { CodexPanel } from "@/features/codex/CodexPanel";
+import { TerminalPanel } from "@/features/terminal/TerminalPanel";
 import { WorkspaceSidebar } from "@/features/workspace/WorkspaceSidebar";
 
 export function AppShell() {
@@ -36,17 +37,14 @@ export function AppShell() {
         />
       </aside>
 
-      <section className="border-t">
-        <div className="flex h-10 items-center gap-2 border-b px-4 text-sm font-medium">
-          <Terminal className="size-4" />
-          Terminal
-        </div>
-      </section>
+      <section className="col-start-2 row-start-3 grid min-h-0 grid-cols-[minmax(0,1fr)_320px] border-t">
+        <TerminalPanel workspaceId={selectedWorkspaceId} />
 
-      <section className="border-t">
-        <div className="flex h-10 items-center gap-2 border-b px-4 text-sm font-medium">
-          <GitBranch className="size-4" />
-          Git
+        <div className="min-h-0 border-l">
+          <div className="flex h-10 items-center gap-2 border-b px-4 text-sm font-medium">
+            <GitBranch className="size-4" />
+            Git
+          </div>
         </div>
       </section>
     </div>

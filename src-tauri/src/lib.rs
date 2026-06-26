@@ -3,6 +3,7 @@ pub mod codex;
 pub mod db;
 pub mod error;
 pub mod state;
+pub mod terminal;
 pub mod workspace;
 
 use std::sync::Arc;
@@ -24,6 +25,9 @@ pub fn run() {
             app.manage(state::AppState {
                 app_data_dir,
                 codex: Arc::new(Mutex::new(codex::process::CodexProcessManager::default())),
+                terminal: Arc::new(Mutex::new(terminal::TerminalManager::new(Box::new(
+                    terminal::PtyTerminalLauncher::new(app.handle().clone()),
+                )))),
             });
             Ok(())
         })
@@ -36,6 +40,10 @@ pub fn run() {
             codex::codex_thread_start,
             codex::codex_turn_send,
             codex::codex_turn_interrupt,
+            terminal::terminal_open,
+            terminal::terminal_write,
+            terminal::terminal_resize,
+            terminal::terminal_close,
             workspace::workspace_list,
             workspace::workspace_add,
             workspace::workspace_remove

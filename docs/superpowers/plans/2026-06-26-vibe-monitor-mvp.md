@@ -1074,7 +1074,7 @@ git push
   - `terminal_close(session_id: String) -> ()`
 - Produces event `terminal://output`.
 
-- [ ] **Step 1: Choose PTY crate**
+- [x] **Step 1: Choose PTY crate**
 
 Use a Windows-compatible PTY crate. Preferred default: `portable-pty` unless implementation testing proves it incompatible with Tauri async handling.
 
@@ -1086,7 +1086,7 @@ cargo add portable-pty
 cd ..
 ```
 
-- [ ] **Step 2: Implement terminal session registry**
+- [x] **Step 2: Implement terminal session registry**
 
 Store terminal sessions in Rust state:
 
@@ -1096,7 +1096,7 @@ HashMap<String, TerminalHandle>
 
 Each session has id, workspace id, cwd, cols, rows, and process handle.
 
-- [ ] **Step 3: Open PowerShell by default on Windows**
+- [x] **Step 3: Open PowerShell by default on Windows**
 
 For MVP, `terminal_open` starts:
 
@@ -1106,7 +1106,7 @@ powershell.exe
 
 with cwd set to Workspace path.
 
-- [ ] **Step 4: Stream output to frontend**
+- [x] **Step 4: Stream output to frontend**
 
 Read PTY output and emit:
 
@@ -1119,7 +1119,7 @@ type TerminalOutputEvent = {
 
 on `terminal://output`.
 
-- [ ] **Step 5: Build xterm panel**
+- [x] **Step 5: Build xterm panel**
 
 `TerminalPanel.tsx` uses:
 
@@ -1131,11 +1131,11 @@ import "@xterm/xterm/css/xterm.css";
 
 Load `FitAddon` with `term.loadAddon(fitAddon)` and call `fitAddon.fit()` after mount and on resize.
 
-- [ ] **Step 6: Convert terminal failures into Attention Items**
+- [x] **Step 6: Convert terminal failures into Attention Items**
 
 For MVP, detect obvious command failure only when a user runs a command through future shortcuts. Raw interactive terminal output should not create Attention Items yet to avoid false positives.
 
-- [ ] **Step 7: Verify**
+- [x] **Step 7: Verify**
 
 Run:
 
@@ -1155,7 +1155,9 @@ Manual check:
 - Resize app; terminal remains usable.
 - Close app; terminal process exits.
 
-- [ ] **Step 8: Commit**
+Implementation note 2026-06-26: terminal MVP uses `portable-pty`, a Rust `TerminalManager` session registry, Windows default `powershell.exe`, `terminal://output` events, and a frontend xterm.js panel wired into the cockpit. Automated verification passed with `npm test -- --run`, `npm run build`, `cargo test`, and `cargo check`. The interactive desktop smoke checklist above still should be clicked through before merging or public release because this agent session did not manually operate the GUI.
+
+- [x] **Step 8: Commit**
 
 Run:
 
