@@ -1,7 +1,11 @@
-import { Bell, GitBranch, Monitor, Terminal } from "lucide-react";
+import { useState } from "react";
+import { GitBranch, Monitor, Terminal } from "lucide-react";
+import { AttentionQueue } from "@/features/attention/AttentionQueue";
 import { WorkspaceSidebar } from "@/features/workspace/WorkspaceSidebar";
 
 export function AppShell() {
+  const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string | null>(null);
+
   return (
     <div className="grid h-screen min-h-0 grid-cols-[280px_minmax(0,1fr)_360px] grid-rows-[48px_minmax(0,1fr)_240px] bg-background text-foreground">
       <header className="col-span-3 flex items-center gap-3 border-b px-4">
@@ -11,7 +15,7 @@ export function AppShell() {
       </header>
 
       <aside className="row-span-2 min-h-0 border-r">
-        <WorkspaceSidebar />
+        <WorkspaceSidebar onWorkspaceSelect={setSelectedWorkspaceId} />
       </aside>
 
       <main className="min-w-0">
@@ -21,10 +25,7 @@ export function AppShell() {
       </main>
 
       <aside className="row-span-2 min-h-0 border-l">
-        <div className="flex h-12 items-center gap-2 border-b px-3 text-sm font-medium">
-          <Bell className="size-4" />
-          Attention Queue
-        </div>
+        <AttentionQueue workspaceId={selectedWorkspaceId} />
       </aside>
 
       <section className="border-t">

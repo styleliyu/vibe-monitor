@@ -26,6 +26,20 @@ pub fn init_db(app_data_dir: &Path) -> Result<(), AppError> {
           created_at TEXT NOT NULL,
           updated_at TEXT NOT NULL
         );
+
+        CREATE TABLE IF NOT EXISTS attention_items (
+          id TEXT PRIMARY KEY,
+          workspace_id TEXT NOT NULL,
+          session_id TEXT,
+          kind TEXT NOT NULL,
+          priority INTEGER NOT NULL,
+          title TEXT NOT NULL,
+          summary TEXT NOT NULL,
+          action_label TEXT,
+          action_ref TEXT,
+          created_at TEXT NOT NULL,
+          resolved_at TEXT
+        );
         "#,
     )?;
 

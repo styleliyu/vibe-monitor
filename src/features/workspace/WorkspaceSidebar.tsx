@@ -6,7 +6,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/shared/lib/cn";
 import { useWorkspaces } from "./useWorkspaces";
 
-export function WorkspaceSidebar() {
+type WorkspaceSidebarProps = {
+  onWorkspaceSelect?: (workspaceId: string | null) => void;
+};
+
+export function WorkspaceSidebar({ onWorkspaceSelect }: WorkspaceSidebarProps) {
   const [path, setPath] = useState("");
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string | null>(null);
   const {
@@ -31,6 +35,7 @@ export function WorkspaceSidebar() {
         onSuccess: (workspace) => {
           setPath("");
           setSelectedWorkspaceId(workspace.id);
+          onWorkspaceSelect?.(workspace.id);
         },
       },
     );
@@ -90,7 +95,10 @@ export function WorkspaceSidebar() {
                 selectedWorkspaceId === workspace.id && "bg-accent",
               )}
               key={workspace.id}
-              onClick={() => setSelectedWorkspaceId(workspace.id)}
+              onClick={() => {
+                setSelectedWorkspaceId(workspace.id);
+                onWorkspaceSelect?.(workspace.id);
+              }}
               type="button"
             >
               <span className="min-w-0 flex-1">
@@ -107,6 +115,7 @@ export function WorkspaceSidebar() {
                   removeWorkspace(workspace.id);
                   if (selectedWorkspaceId === workspace.id) {
                     setSelectedWorkspaceId(null);
+                    onWorkspaceSelect?.(null);
                   }
                 }}
                 size="icon"

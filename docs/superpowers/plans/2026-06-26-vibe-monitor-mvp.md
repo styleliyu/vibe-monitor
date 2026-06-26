@@ -706,7 +706,7 @@ git push
   - `attention_resolve(id: String) -> ()`
 - Produces frontend `AttentionItem` and queue UI.
 
-- [ ] **Step 1: Add database table**
+- [x] **Step 1: Add database table**
 
 Add migration/schema:
 
@@ -726,7 +726,7 @@ CREATE TABLE IF NOT EXISTS attention_items (
 );
 ```
 
-- [ ] **Step 2: Define Rust types**
+- [x] **Step 2: Define Rust types**
 
 Create `src-tauri/src/attention/mod.rs` with:
 
@@ -750,7 +750,7 @@ pub struct AttentionItem {
 
 Accept only `kind` values `approval`, `blocked`, `failed`, `done`, `unread`, `info`; reject anything else.
 
-- [ ] **Step 3: Implement commands**
+- [x] **Step 3: Implement commands**
 
 Register:
 
@@ -767,7 +767,7 @@ Sort unresolved items by:
 
 Resolved items are excluded from the default queue.
 
-- [ ] **Step 4: Add frontend types**
+- [x] **Step 4: Add frontend types**
 
 Create `src/features/attention/types.ts`:
 
@@ -795,7 +795,7 @@ export type AttentionItem = {
 };
 ```
 
-- [ ] **Step 5: Add queue UI**
+- [x] **Step 5: Add queue UI**
 
 Create `AttentionQueue.tsx` with:
 
@@ -806,11 +806,11 @@ Create `AttentionQueue.tsx` with:
 - Resolve button
 - empty state: `No attention items.`
 
-- [ ] **Step 6: Add manual test seed command**
+- [x] **Step 6: Add manual test seed command**
 
 During MVP only, add a development-only button or command path to create a sample `failed` item for the selected Workspace. Remove or hide this behind a dev flag before public release.
 
-- [ ] **Step 7: Verify**
+- [x] **Step 7: Verify**
 
 Run:
 
@@ -829,7 +829,7 @@ Manual check:
 - Resolve removes it from active queue.
 - Restart app; unresolved items persist.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 Run:
 

@@ -1,3 +1,4 @@
+pub mod attention;
 pub mod db;
 pub mod error;
 pub mod state;
@@ -20,6 +21,9 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            attention::attention_list,
+            attention::attention_create,
+            attention::attention_resolve,
             workspace::workspace_list,
             workspace::workspace_add,
             workspace::workspace_remove
