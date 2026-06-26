@@ -4,7 +4,7 @@ vibe-monitor is a local-first AI development Cockpit for keeping Workspace, Code
 
 ## Status
 
-This repository is a private MVP checkpoint. The current MVP scope is intentionally narrow:
+This repository is a public early-stage MVP checkpoint. The current MVP scope is intentionally narrow:
 
 - Workspace management with local persistence
 - Codex app-server detection and Thread control surface

@@ -1,6 +1,6 @@
 # MVP Verification
 
-Use this checklist before treating the private MVP as ready for the next implementation phase. Automated checks prove the code compiles and tests pass; manual scenarios prove the desktop workflow is usable.
+Use this checklist before treating the public MVP as ready for the next implementation phase. Automated checks prove the code compiles and tests pass; manual scenarios prove the desktop workflow is usable.
 
 ## Automated Checks
 
